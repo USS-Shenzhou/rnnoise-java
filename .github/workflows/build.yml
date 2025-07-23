@@ -56,5 +56,5 @@ jobs:
       - name: Upload RNNoise
         uses: actions/upload-artifact@v4
         with:
-          name: RNNoise-${{ matrix.os }}
+          name: RNNoise-${{ matrix.runner }}
           path: "build/libs/*.jar"
