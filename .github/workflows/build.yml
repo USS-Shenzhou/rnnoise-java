@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [ macos-latest, ubuntu-20.04, windows-latest ]
+        platform: [ macos-latest, ubuntu-24.04, windows-latest ]
       fail-fast: true
     runs-on: ${{ matrix.platform }}
     steps:
@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3.3.0
         with:
           distribution: adopt
-          java-version: 17
+          java-version: 21
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
         if: ${{ matrix.platform == 'windows-latest' }}
