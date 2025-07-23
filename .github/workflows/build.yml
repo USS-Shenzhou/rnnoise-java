@@ -45,7 +45,7 @@ jobs:
         if: ${{ matrix.runner == 'windows-11-arm' }}
         shell: pwsh
         run: |
-          $url  = 'https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-winarm64.zip'
+          $url  = 'https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-winarm64.zip'
           $dest = "$env:RUNNER_TEMP\ninja.zip"
           Invoke-WebRequest -Uri $url -OutFile $dest
           Expand-Archive -Path $dest -DestinationPath "$env:RUNNER_TEMP\ninja"
