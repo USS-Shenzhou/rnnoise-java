@@ -7,26 +7,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-24.04
-            arch: x64
+          - runner: ubuntu-24.04
             musl: true
-          - os: ubuntu-24.04
-            arch: arm64
+          - runner: ubuntu-24.04-arm64 
             musl: true
-          - os: macos-latest
-            arch: x64
+          - runner: macos-13
             musl: false
-          - os: macos-latest
-            arch: arm64
+          - runner: macos-14
             musl: false
-          - os: windows-latest
-            arch: x64
+          - runner: windows-latest
             musl: false
-          - os: windows-latest
-            arch: arm64
+          - runner: windows-11-arm
             musl: false
       fail-fast: true
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Install musl-tools (for Linux musl build)
         if: ${{ matrix.musl }}
@@ -62,5 +56,5 @@ jobs:
       - name: Upload RNNoise
         uses: actions/upload-artifact@v4
         with:
-          name: RNNoise-${{ matrix.os }}-${{ matrix.arch }}
+          name: RNNoise-${{ matrix.os }}
           path: "build/libs/*.jar"
