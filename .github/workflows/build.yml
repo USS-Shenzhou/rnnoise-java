@@ -40,11 +40,22 @@ jobs:
         with:
           distribution: adopt
           java-version: 21
+          
+      - name: Install Ninja (Windows arm64)
+        if: ${{ matrix.runner == 'windows-11-arm' }}
+        shell: pwsh
+        run: |
+          $url  = 'https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-winarm64.zip'
+          $dest = "$env:RUNNER_TEMP\ninja.zip"
+          Invoke-WebRequest -Uri $url -OutFile $dest
+          Expand-Archive -Path $dest -DestinationPath "$env:RUNNER_TEMP\ninja"
+          "$env:RUNNER_TEMP\ninja" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
         if: ${{ matrix.os == 'windows-latest' }}
         with:
-          version: 1.10.0
+          version: 1.11.1
       - name: Set up Clang
         uses: egor-tensin/setup-clang@v1
         if: ${{ matrix.os == 'windows-latest' }}
