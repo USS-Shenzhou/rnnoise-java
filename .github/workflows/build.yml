@@ -6,10 +6,37 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [ macos-latest, ubuntu-24.04, windows-latest ]
+        include:
+          - os: ubuntu-24.04
+            arch: x64
+            musl: true
+          - os: ubuntu-24.04
+            arch: arm64
+            musl: true
+          - os: macos-latest
+            arch: x64
+            musl: false
+          - os: macos-latest
+            arch: arm64
+            musl: false
+          - os: windows-latest
+            arch: x64
+            musl: false
+          - os: windows-latest
+            arch: arm64
+            musl: false
       fail-fast: true
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     steps:
+      - name: Install musl-tools (for Linux musl build)
+        if: ${{ matrix.musl }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+      - name: Enable musl compiler
+        if: ${{ matrix.musl }}
+        run: echo "CC=musl-gcc" >> $GITHUB_ENV
+        
       - name: Checkout
         uses: actions/checkout@v3.0.2
         with:
@@ -21,12 +48,12 @@ jobs:
           java-version: 21
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
-        if: ${{ matrix.platform == 'windows-latest' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         with:
           version: 1.10.0
       - name: Set up Clang
         uses: egor-tensin/setup-clang@v1
-        if: ${{ matrix.platform == 'windows-latest' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         with:
           version: latest
           platform: x64
